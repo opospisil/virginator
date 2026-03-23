@@ -4,7 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 export VIRGINATOR_ROOT=$(cd -- "$SCRIPT_DIR/.." && pwd)
-export VIRGINATOR_CONFIG=${VIRGINATOR_CONFIG:-/etc/virginator/config.sh}
+export VIRGINATOR_CONFIG=${VIRGINATOR_CONFIG:-$VIRGINATOR_ROOT/config/current.sh}
 
 # shellcheck source=../lib/common.sh
 . "$VIRGINATOR_ROOT/lib/common.sh"

@@ -9,6 +9,7 @@ require_root
 load_config "${VIRGINATOR_CONFIG:-}"
 
 log "enabling required services"
+systemctl enable --now iwd.service
 systemctl enable --now NetworkManager.service
 systemctl enable --now bluetooth.service
 systemctl enable --now pcscd.socket

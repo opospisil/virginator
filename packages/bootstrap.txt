@@ -8,6 +8,7 @@ e2fsprogs
 efibootmgr
 fish
 git
+iwd
 linux
 linux-firmware
 man-db

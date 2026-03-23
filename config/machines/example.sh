@@ -29,11 +29,6 @@ VAULT_MOUNTPOINT="/vault"
 GO_VERSION="1.24.2"
 NODE_VERSION="22.14.0"
 
-# Set these only if you want a non-interactive install.
-# Use something like: openssl passwd -6
-ROOT_PASSWORD_HASH=""
-PRIMARY_USER_PASSWORD_HASH=""
-
 # Optional, but recommended for boot stability.
 # CPU_MICROCODE_PACKAGE="amd-ucode"
 # CPU_MICROCODE_IMAGE="amd-ucode.img"

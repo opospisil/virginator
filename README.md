@@ -17,6 +17,7 @@ Install scripts to automate Arch linux installation and make reclaiming ones vir
 - keep Neovim nightly, Go, Node.js, and Bitwarden CLI in user space instead of pacman
 - prefer Podman over Docker for dev containers
 - avoid touching old home directories or the encrypted vault during base install
+- use `NetworkManager` with `iwd` as the Wi-Fi backend and disable Wi-Fi powersave by default
 
 ## Repository layout
 
@@ -33,6 +34,10 @@ Install scripts to automate Arch linux installation and make reclaiming ones vir
 - `skel/user/` contains initial user config files for `fish`, `i3`, and `alacritty`
 
 `lemurs` is the default display manager. The repo still keeps a simple `.xinitrc` fallback, but the normal login path is through lemurs.
+
+The installed repo lives under `/opt/virginator`, including the active machine config at `/opt/virginator/config/current.sh`, so both root and the fresh user can run the follow-up phases.
+
+The default networking stack is `NetworkManager` with `iwd` as the Wi-Fi backend. The installer also disables NetworkManager Wi-Fi powersave by default to avoid overly aggressive laptop power saving.
 
 ## Expected partition contract
 
@@ -71,17 +76,40 @@ That lets you:
 - keep old home directories on the preserved home partition
 - log into a clean account with clean dotfiles
 - manually copy or symlink only the pieces you still want
+- use the same shared install tree and readable machine config for both root and user phases
 
 ## Quick start
 
-1. Boot the Arch ISO and connect to the network.
-2. Clone the repo over HTTPS.
+1. Boot the Arch ISO and do the live-environment bootstrap:
+
+```bash
+iwctl
+# inside iwctl:
+#   device list
+#   station wlan0 scan
+#   station wlan0 get-networks
+#   station wlan0 connect "your-ssid"
+#   exit
+
+iw dev wlan0 set power_save off
+pacman -Sy --needed reflector git
+reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+git clone https://github.com/opospisil/virginator.git
+cd virginator
+```
+
+Replace `wlan0` with the real wireless device shown by `iwctl device list`.
+
+2. Inspect the target partitions and generate a PARTUUID snippet if needed:
+
+```bash
+./scripts/extract-partuuids.sh /dev/nvme0n1p1 /dev/nvme0n1p2 /dev/nvme0n1p3 /dev/nvme0n1p4
+```
+
 3. Copy `config/machines/example.sh` to your real machine config and fill in the values.
 4. Run the live install phase:
 
 ```bash
-git clone https://github.com/opospisil/virginator.git
-cd virginator
 cp config/machines/example.sh config/machines/my-machine.sh
 sudo ./bootstrap.sh config/machines/my-machine.sh
 ```
@@ -89,27 +117,37 @@ sudo ./bootstrap.sh config/machines/my-machine.sh
 5. Reboot into the installed system.
 6. Run the system phase as root:
 
+During the chroot phase, the installer prompts interactively for the root password and the fresh user's password.
+
 ```bash
-sudo /usr/local/src/virginator/post-root/run.sh
+sudo /opt/virginator/post-root/run.sh
 ```
 
 7. Reboot or switch to `lemurs`, log in as the new user, and run the user phase:
 
 ```bash
-/usr/local/src/virginator/post-user/run.sh
+/opt/virginator/post-user/run.sh
 ```
 
 8. If vault support is enabled for the machine, mount the vault manually when you are ready:
 
 ```bash
-sudo /usr/local/src/virginator/scripts/mount-vault.sh
+sudo /opt/virginator/scripts/mount-vault.sh
 ```
 
 9. Optionally run the smoke test:
 
 ```bash
-/usr/local/src/virginator/scripts/smoke-test.sh
-sudo /usr/local/src/virginator/scripts/smoke-test.sh
+/opt/virginator/scripts/smoke-test.sh
+sudo /opt/virginator/scripts/smoke-test.sh
+```
+
+If Wi-Fi is not up on first boot, use one of these before assuming the install is bad:
+
+```bash
+nmtui
+nmcli device wifi list
+iwctl
 ```
 
 ## Optional authentication setup

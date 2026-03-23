@@ -6,16 +6,9 @@ set -euo pipefail
 . "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)/lib/common.sh"
 
 set_account_password() {
-  local account_name password_hash
+  local account_name
 
   account_name=$1
-  password_hash=$2
-
-  if [[ -n "$password_hash" ]]; then
-    usermod -p "$password_hash" "$account_name"
-    return 0
-  fi
-
   log "set the password for $account_name"
   passwd "$account_name"
 }
@@ -44,6 +37,20 @@ EOF
     printf 'initrd /initramfs-linux.img\n'
     printf 'options root=UUID=%s rw\n' "$root_uuid"
   } > "$loader_entry"
+}
+
+configure_networkmanager() {
+  install -d /etc/NetworkManager/conf.d
+
+  cat > /etc/NetworkManager/conf.d/20-wifi-backend.conf <<'EOF'
+[device]
+wifi.backend=iwd
+EOF
+
+  cat > /etc/NetworkManager/conf.d/20-wifi-powersave.conf <<'EOF'
+[connection]
+wifi.powersave=2
+EOF
 }
 
 create_primary_user() {
@@ -75,7 +82,7 @@ create_primary_user() {
 }
 
 require_root
-require_command blkid bootctl findmnt hwclock locale-gen passwd sed systemctl useradd usermod
+require_command blkid bootctl findmnt hwclock locale-gen passwd sed systemctl useradd
 load_config "${VIRGINATOR_CONFIG:-}"
 
 log "configuring locale and time settings"
@@ -114,15 +121,19 @@ chmod 440 /etc/sudoers.d/10-wheel
 log "creating the fresh primary user"
 create_primary_user
 
+log "configuring NetworkManager to use iwd"
+configure_networkmanager
+
 log "setting account passwords"
-set_account_password root "$ROOT_PASSWORD_HASH"
-set_account_password "$PRIMARY_USER_NAME" "$PRIMARY_USER_PASSWORD_HASH"
+set_account_password root
+set_account_password "$PRIMARY_USER_NAME"
 
 if vault_enabled; then
   mkdir -p "$VAULT_MOUNTPOINT"
 fi
 
 log "enabling base services"
+systemctl enable iwd.service
 systemctl enable NetworkManager.service
 systemctl enable systemd-timesyncd.service
 

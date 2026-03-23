@@ -12,5 +12,5 @@ load_config "${VIRGINATOR_CONFIG:-}"
 log "running base system configuration inside chroot"
 arch-chroot "$INSTALL_MOUNTPOINT" /usr/bin/env \
   VIRGINATOR_ROOT="$REPO_INSTALL_DIR" \
-  VIRGINATOR_CONFIG="$CONFIG_INSTALL_DIR/config.sh" \
+  VIRGINATOR_CONFIG="$CONFIG_INSTALL_DIR/current.sh" \
   bash "$REPO_INSTALL_DIR/chroot/10-base-system.sh"

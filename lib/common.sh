@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 VIRGINATOR_ROOT=${VIRGINATOR_ROOT:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}
-VIRGINATOR_CONFIG=${VIRGINATOR_CONFIG:-/etc/virginator/config.sh}
+VIRGINATOR_CONFIG=${VIRGINATOR_CONFIG:-$VIRGINATOR_ROOT/config/current.sh}
 
 log() {
   printf '==> %s\n' "$*"
@@ -130,7 +130,7 @@ copy_repo_to_target() {
   cp -a "$VIRGINATOR_ROOT/." "$target_root$REPO_INSTALL_DIR/"
 
   mkdir -p "$target_root$CONFIG_INSTALL_DIR"
-  install -m 600 "$VIRGINATOR_CONFIG" "$target_root$CONFIG_INSTALL_DIR/config.sh"
+  install -m 644 "$VIRGINATOR_CONFIG" "$target_root$CONFIG_INSTALL_DIR/current.sh"
 }
 
 ensure_line_in_file() {
