@@ -1,0 +1,22 @@
+# default CLI and development utilities
+bat
+bash-completion
+curl
+direnv
+fd
+fish
+skim
+git
+git-crypt
+jq
+less
+man-db
+man-pages
+openssh
+ripgrep
+rsync
+stow
+tmux
+tree
+wget
+yazi

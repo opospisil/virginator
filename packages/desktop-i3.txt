@@ -1,0 +1,19 @@
+# minimal desktop stack
+alacritty
+dunst
+i3-wm
+i3blocks
+i3lock
+network-manager-applet
+noto-fonts
+pcmanfm
+picom
+polkit-gnome
+rofi
+ttf-iosevka-nerd
+udiskie
+xclip
+xorg-server
+xorg-xinit
+xorg-xrandr
+xss-lock

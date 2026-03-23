@@ -1,0 +1,18 @@
+# base system installed during pacstrap
+base
+base-devel
+cryptsetup
+curl
+dosfstools
+e2fsprogs
+efibootmgr
+fish
+git
+linux
+linux-firmware
+man-db
+man-pages
+networkmanager
+openssh
+rsync
+sudo

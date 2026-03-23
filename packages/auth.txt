@@ -1,0 +1,9 @@
+# yubikey, fingerprint, and smartcard tooling
+ccid
+fprintd
+gnupg
+opensc
+pam-u2f
+pcsclite
+pinentry
+yubikey-manager

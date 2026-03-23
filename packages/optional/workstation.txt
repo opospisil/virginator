@@ -1,0 +1,11 @@
+# reviewed extras from the current package inventory
+arandr
+chromium
+cups
+flameshot
+gparted
+lazygit
+openconnect
+postgresql
+virt-manager
+vlc

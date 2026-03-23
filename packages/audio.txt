@@ -1,0 +1,10 @@
+# audio and bluetooth
+alsa-utils
+blueman
+bluez
+bluez-utils
+pavucontrol
+pipewire
+pipewire-audio
+pipewire-pulse
+wireplumber

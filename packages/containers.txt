@@ -1,0 +1,9 @@
+# container and vpn support
+aardvark-dns
+fuse-overlayfs
+netavark
+networkmanager-openvpn
+openvpn
+podman
+podman-compose
+slirp4netns
