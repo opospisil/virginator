@@ -14,11 +14,12 @@ load_config "$VIRGINATOR_CONFIG"
 
 for script in \
   "$SCRIPT_DIR/10-install-packages.sh" \
-  "$SCRIPT_DIR/20-enable-services.sh"
+  "$SCRIPT_DIR/20-configure-lemurs.sh" \
+  "$SCRIPT_DIR/30-enable-services.sh"
 do
   log "executing ${script##*/}"
   bash "$script"
 done
 
 log "post-root setup complete"
-printf 'log in as %s and run %s/post-user/run.sh\n' "$PRIMARY_USER_NAME" "$REPO_INSTALL_DIR"
+printf 'reboot or switch to lemurs, log in as %s, and run %s/post-user/run.sh\n' "$PRIMARY_USER_NAME" "$REPO_INSTALL_DIR"

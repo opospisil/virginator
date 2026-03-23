@@ -27,7 +27,7 @@ done
 log "post-user setup complete"
 
 if vault_enabled; then
-  printf 'launch i3 with startx, then mount the vault with sudo %s/scripts/mount-vault.sh\n' "$REPO_INSTALL_DIR"
+  printf 'lemurs is the default login manager; mount the vault with sudo %s/scripts/mount-vault.sh when you are ready\n' "$REPO_INSTALL_DIR"
 else
-  printf 'launch i3 with startx\n'
+  printf 'lemurs is the default login manager\n'
 fi

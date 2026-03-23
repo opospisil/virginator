@@ -13,7 +13,7 @@ Install scripts to automate Arch linux installation and make reclaiming ones vir
 ## Design goals
 
 - keep the default package set short and reviewable
-- install `i3`, `fish`, `alacritty`, `tmux`, PipeWire, OpenVPN, YubiKey and fingerprint tooling
+- install `i3`, `lemurs`, `fish`, `alacritty`, `tmux`, PipeWire, OpenVPN, YubiKey and fingerprint tooling
 - keep Neovim nightly, Go, Node.js, and Bitwarden CLI in user space instead of pacman
 - prefer Podman over Docker for dev containers
 - avoid touching old home directories or the encrypted vault during base install
@@ -31,6 +31,8 @@ Install scripts to automate Arch linux installation and make reclaiming ones vir
 - `scripts/` contains reusable helpers like the vault, Neovim nightly, Go, Node, and Bitwarden installers
 - `scripts/` also contains opt-in YubiKey and fingerprint enrollment/PAM helpers
 - `skel/user/` contains initial user config files for `fish`, `i3`, and `alacritty`
+
+`lemurs` is the default display manager. The repo still keeps a simple `.xinitrc` fallback, but the normal login path is through lemurs.
 
 ## Expected partition contract
 
@@ -91,7 +93,7 @@ sudo ./bootstrap.sh config/machines/my-machine.sh
 sudo /usr/local/src/virginator/post-root/run.sh
 ```
 
-7. Log in as the new user and run the user phase:
+7. Reboot or switch to `lemurs`, log in as the new user, and run the user phase:
 
 ```bash
 /usr/local/src/virginator/post-user/run.sh
@@ -116,14 +118,18 @@ Authentication changes stay opt-in and manual.
 
 - YubiKey enrollment as the fresh user: `scripts/enroll-yubikey.sh`
 - Add another key later: `scripts/enroll-yubikey.sh --append`
-- Enable YubiKey PAM auth with password fallback: `sudo scripts/configure-yubikey-auth.sh enable sudo`
-- Also enable YubiKey for login if wanted: `sudo scripts/configure-yubikey-auth.sh enable login`
+- Enable YubiKey PAM auth for `sudo` with password fallback: `sudo scripts/configure-yubikey-auth.sh enable sudo`
+- Enable YubiKey auth for the lemurs login screen: `sudo scripts/configure-yubikey-auth.sh enable lemurs`
+- Also enable YubiKey for console login if wanted: `sudo scripts/configure-yubikey-auth.sh enable login`
 - Fingerprint enrollment: `sudo scripts/enroll-fingerprint.sh right-index-finger`
-- Enable fingerprint login: `sudo scripts/configure-fingerprint-auth.sh enable login`
+- Enable fingerprint auth for the lemurs login screen: `sudo scripts/configure-fingerprint-auth.sh enable lemurs`
+- Also enable fingerprint auth for console login if wanted: `sudo scripts/configure-fingerprint-auth.sh enable login`
 
 The PAM helper scripts always keep password fallback in place, write backups as `*.virginator.bak`, and are intentionally separate from the main install flow.
 
-Fingerprint setup is limited to login only. It is intentionally not wired into `sudo` or `polkit` because that is considered unsafe.
+For the normal graphical setup, the `lemurs` target is usually the one you want. Only add the `login` target if you also want console TTY login.
+
+Fingerprint setup is limited to lemurs or console login. It is intentionally not wired into `sudo` or `polkit` because that is considered unsafe.
 
 ## Package bundles
 
@@ -140,11 +146,12 @@ Optional extras reviewed from the current package inventory live under `packages
 
 Neovim is not installed from pacman in the default flow. `post-user/run.sh` installs the nightly build into `~/.local/opt/neovim-nightly` and symlinks `~/.local/bin/nvim`.
 
+The default desktop flow is `lemurs` -> `i3`.
+
 ## Current limits
 
 - no automatic partitioning
 - no automatic PAM edits during install; YubiKey and fingerprint setup stays opt-in
-- no display manager yet; the default user flow is `startx`
 - no automatic migration from old home directories or vault content
 
 That keeps v1 focused on a safe reinstall path first.

@@ -26,6 +26,7 @@ check_command() {
 check_command fish
 check_command i3
 check_command alacritty
+check_command lemurs
 check_command tmux
 check_command podman
 check_command openvpn
@@ -35,6 +36,7 @@ check_command pamu2fcfg
 check_command fprintd-enroll
 
 if [[ $(id -u) -eq 0 ]]; then
+  systemctl is-enabled --quiet lemurs.service && printf '[ok] lemurs enabled\n' || printf '[missing] lemurs enabled\n'
   systemctl is-enabled --quiet NetworkManager.service && printf '[ok] NetworkManager enabled\n' || printf '[missing] NetworkManager enabled\n'
   systemctl is-enabled --quiet bluetooth.service && printf '[ok] bluetooth enabled\n' || printf '[missing] bluetooth enabled\n'
   systemctl is-enabled --quiet pcscd.socket && printf '[ok] pcscd.socket enabled\n' || printf '[missing] pcscd.socket enabled\n'

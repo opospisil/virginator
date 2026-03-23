@@ -54,10 +54,11 @@ main() {
   printf 'Next steps:\n'
   printf '  1. reboot into the new system\n'
   printf '  2. run sudo %s/post-root/run.sh\n' "$REPO_INSTALL_DIR"
-  printf '  3. log in as %s and run %s/post-user/run.sh\n' "$PRIMARY_USER_NAME" "$REPO_INSTALL_DIR"
+  printf '  3. reboot or switch to lemurs\n'
+  printf '  4. log in as %s and run %s/post-user/run.sh\n' "$PRIMARY_USER_NAME" "$REPO_INSTALL_DIR"
 
   if vault_enabled; then
-    printf '  4. mount the vault manually with sudo %s/scripts/mount-vault.sh\n' "$REPO_INSTALL_DIR"
+    printf '  5. mount the vault manually with sudo %s/scripts/mount-vault.sh\n' "$REPO_INSTALL_DIR"
   fi
 }
 

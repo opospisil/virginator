@@ -4,6 +4,7 @@ dunst
 i3-wm
 i3blocks
 i3lock
+lemurs
 network-manager-applet
 noto-fonts
 pcmanfm
