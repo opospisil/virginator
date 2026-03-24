@@ -1,2 +1,3 @@
 config/machines/*.sh
 !config/machines/example.sh
+/config/generated-partitions.sh

@@ -55,7 +55,7 @@ vault_enabled() {
 }
 
 load_config() {
-  local config_path
+  local config_path generated_partition_config
   config_path=${1:-$VIRGINATOR_CONFIG}
 
   [[ -f "$VIRGINATOR_ROOT/config/defaults.sh" ]] || die "defaults file not found under $VIRGINATOR_ROOT/config/defaults.sh"
@@ -65,6 +65,12 @@ load_config() {
   . "$VIRGINATOR_ROOT/config/defaults.sh"
   # shellcheck source=/dev/null
   . "$config_path"
+
+  generated_partition_config=${GENERATED_PARTITION_CONFIG:-$VIRGINATOR_ROOT/config/generated-partitions.sh}
+  if [[ -f "$generated_partition_config" ]]; then
+    # shellcheck source=/dev/null
+    . "$generated_partition_config"
+  fi
 
   VIRGINATOR_CONFIG=$(realpath "$config_path")
   export VIRGINATOR_ROOT VIRGINATOR_CONFIG

@@ -92,7 +92,7 @@ iwctl
 #   exit
 
 iw dev wlan0 set power_save off
-pacman -Sy --needed reflector git
+pacman -Sy --needed reflector git skim
 reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 git clone https://github.com/opospisil/virginator.git
 cd virginator
@@ -100,10 +100,18 @@ cd virginator
 
 Replace `wlan0` with the real wireless device shown by `iwctl device list`.
 
-2. Inspect the target partitions and generate a PARTUUID snippet if needed:
+2. Generate the partition selector file:
 
 ```bash
-./scripts/extract-partuuids.sh /dev/nvme0n1p1 /dev/nvme0n1p2 /dev/nvme0n1p3 /dev/nvme0n1p4
+./scripts/select-partitions.sh
+```
+
+This writes `config/generated-partitions.sh`, which is auto-loaded by the installer when present.
+
+If you prefer the non-interactive path, you can still generate the same snippet manually:
+
+```bash
+./scripts/extract-partuuids.sh /dev/nvme0n1p1 /dev/nvme0n1p2 /dev/nvme0n1p3 /dev/nvme0n1p4 > config/generated-partitions.sh
 ```
 
 3. Copy `config/machines/example.sh` to your real machine config and fill in the values.
