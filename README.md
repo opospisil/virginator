@@ -80,7 +80,7 @@ That lets you:
 
 ## Quick start
 
-1. Boot the Arch ISO and do the live-environment bootstrap:
+1. Boot the Arch ISO and connect to Wi-Fi:
 
 ```bash
 iwctl
@@ -90,17 +90,21 @@ iwctl
 #   station wlan0 get-networks
 #   station wlan0 connect "your-ssid"
 #   exit
-
-iw dev wlan0 set power_save off
-pacman -Sy --needed reflector git skim
-reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-git clone https://github.com/opospisil/virginator.git
-cd virginator
 ```
 
 Replace `wlan0` with the real wireless device shown by `iwctl device list`.
 
-2. Generate the partition selector file:
+2. Download and run the live ISO bootstrap helper:
+
+```bash
+curl -O https://raw.githubusercontent.com/opospisil/virginator/master/preinstall.sh
+sudo bash preinstall.sh
+cd virginator
+```
+
+This sets `DisablePowerSave=true` in `/etc/iwd/main.conf`, restarts `iwd`, refreshes mirrors, installs `reflector`, `git`, `skim`, and clones the repo.
+
+3. Generate the partition selector file:
 
 ```bash
 ./scripts/select-partitions.sh
@@ -114,16 +118,16 @@ If you prefer the non-interactive path, you can still generate the same snippet 
 ./scripts/extract-partuuids.sh /dev/nvme0n1p1 /dev/nvme0n1p2 /dev/nvme0n1p3 /dev/nvme0n1p4 > config/generated-partitions.sh
 ```
 
-3. Copy `config/machines/example.sh` to your real machine config and fill in the values.
-4. Run the live install phase:
+4. Copy `config/machines/example.sh` to your real machine config and fill in the values.
+5. Run the live install phase:
 
 ```bash
 cp config/machines/example.sh config/machines/my-machine.sh
 sudo ./bootstrap.sh config/machines/my-machine.sh
 ```
 
-5. Reboot into the installed system.
-6. Run the system phase as root:
+6. Reboot into the installed system.
+7. Run the system phase as root:
 
 During the chroot phase, the installer prompts interactively for the root password and the fresh user's password.
 
@@ -131,19 +135,19 @@ During the chroot phase, the installer prompts interactively for the root passwo
 sudo /opt/virginator/post-root/run.sh
 ```
 
-7. Reboot or switch to `lemurs`, log in as the new user, and run the user phase:
+8. Reboot or switch to `lemurs`, log in as the new user, and run the user phase:
 
 ```bash
 /opt/virginator/post-user/run.sh
 ```
 
-8. If vault support is enabled for the machine, mount the vault manually when you are ready:
+9. If vault support is enabled for the machine, mount the vault manually when you are ready:
 
 ```bash
 sudo /opt/virginator/scripts/mount-vault.sh
 ```
 
-9. Optionally run the smoke test:
+10. Optionally run the smoke test:
 
 ```bash
 /opt/virginator/scripts/smoke-test.sh
