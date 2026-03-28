@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-HOSTNAME="arch-fresh"
+HOSTNAME="o"
 TIMEZONE="Europe/Prague"
 LOCALE="en_US.UTF-8"
 KEYMAP="us"
 
-PRIMARY_USER_NAME="freshuser"
+PRIMARY_USER_NAME="ip5"
 PRIMARY_USER_UID="1100"
 PRIMARY_USER_GID="1100"
 PRIMARY_USER_GROUPS=(wheel)
