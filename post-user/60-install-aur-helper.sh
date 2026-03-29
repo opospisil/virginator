@@ -7,6 +7,10 @@ set -euo pipefail
 
 load_config "${VIRGINATOR_CONFIG:-}"
 
+if [[ -d "$HOME/.cargo/bin" ]]; then
+  PATH="$HOME/.cargo/bin:$PATH"
+fi
+
 [[ -n ${AUR_HELPER_PACKAGE:-} ]] || {
   log "AUR helper package is empty; skipping AUR helper install"
   exit 0

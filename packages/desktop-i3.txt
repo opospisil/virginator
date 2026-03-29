@@ -11,10 +11,11 @@ pcmanfm
 picom
 polkit-gnome
 rofi
-ttf-iosevka-nerd
+ttf-iosevkaterm-nerd
 udiskie
 xclip
 xorg-server
 xorg-xinit
 xorg-xrandr
 xss-lock
+starship

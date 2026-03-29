@@ -142,6 +142,8 @@ sudo /opt/virginator/post-root/run.sh
 /opt/virginator/post-user/run.sh
 ```
 
+The user phase primes `sudo` once at the start and keeps the credential alive so the Rustup/AUR helper/AUR package steps can finish without repeated password prompts.
+
 9. If vault support is enabled for the machine, mount the vault manually when you are ready:
 
 ```bash
@@ -154,6 +156,14 @@ sudo /opt/virginator/scripts/mount-vault.sh
 /opt/virginator/scripts/smoke-test.sh
 sudo /opt/virginator/scripts/smoke-test.sh
 ```
+
+11. Optionally clone and stow the standard dotfiles:
+
+```bash
+/opt/virginator/scripts/setup-dotfiles.sh
+```
+
+The dotfiles setup script removes the bootstrap `fish`, `i3`, `i3blocks`, and `alacritty` config paths first, then stows your real config.
 
 If Wi-Fi is not up on first boot, use one of these before assuming the install is bad:
 
@@ -168,7 +178,7 @@ iwctl
 - `preinstall.sh`: live ISO bootstrap tools only - `reflector`, `git`, `skim`
 - `packages/bootstrap.txt`: minimal pacstrap set for the fresh system
 - `packages/base.txt`, `packages/desktop-i3.txt`, `packages/audio.txt`, `packages/auth.txt`, `packages/containers.txt`: post-root pacman installs
-- `AUR_HELPER_PACKAGE` and `AUR_PACKAGES` in `config/defaults.sh`: post-user AUR installs
+- Rustup plus `AUR_HELPER_PACKAGE` and `AUR_PACKAGES` in `config/defaults.sh`: post-user user-space and AUR installs
 
 That keeps the package sources grouped by install stage instead of scattering package names through scripts.
 
@@ -186,6 +196,8 @@ Authentication changes stay opt-in and manual.
 - Also enable fingerprint auth for console login if wanted: `sudo scripts/configure-fingerprint-auth.sh enable login`
 
 The PAM helper scripts always keep password fallback in place, write backups as `*.virginator.bak`, and are intentionally separate from the main install flow.
+
+YubiKey enrollment requires a physical touch confirmation. If `pamu2fcfg` reports `FIDO_ERR_OPERATION_DENIED`, retry and touch the key when prompted.
 
 For the normal graphical setup, the `lemurs` target is usually the one you want. Only add the `login` target if you also want console TTY login.
 

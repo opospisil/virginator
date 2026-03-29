@@ -15,6 +15,7 @@ Usage: ./scripts/enroll-yubikey.sh [--append]
 
 Creates or extends ~/.config/Yubico/u2f_keys for the configured primary user.
 Use --append when adding a second key.
+Touch the YubiKey when prompted during enrollment.
 EOF
 }
 
@@ -46,11 +47,12 @@ fi
 
 if (( APPEND == 1 )); then
   [[ -f "$AUTHFILE" ]] || die "cannot append because $AUTHFILE does not exist yet"
-  log "append mode: touch the next key when prompted"
+  log "append mode: touch the YubiKey when prompted"
   ENTRY=$(pamu2fcfg -i "$ORIGIN" -n | tr -d '\n')
   printf '%s\n' "$(tr -d '\n' < "$AUTHFILE")$ENTRY" > "$AUTHFILE"
 else
   log "creating $AUTHFILE for hostname $HOSTNAME"
+  log "touch the YubiKey when prompted"
   ENTRY=$(pamu2fcfg -i "$ORIGIN" | tr -d '\n')
   printf '%s\n' "$ENTRY" > "$AUTHFILE"
 fi

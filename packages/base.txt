@@ -20,3 +20,4 @@ tmux
 tree
 wget
 yazi
+acpi
