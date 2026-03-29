@@ -42,12 +42,10 @@ EOF
 configure_networkmanager() {
   install -d /etc/NetworkManager/conf.d
 
-  cat > /etc/NetworkManager/conf.d/20-wifi-backend.conf <<'EOF'
+  cat > /etc/NetworkManager/conf.d/20-wifi.conf <<'EOF'
 [device]
 wifi.backend=iwd
-EOF
 
-  cat > /etc/NetworkManager/conf.d/20-wifi-powersave.conf <<'EOF'
 [connection]
 wifi.powersave=2
 EOF

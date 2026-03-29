@@ -174,6 +174,18 @@ nmcli device wifi list
 iwctl
 ```
 
+If Wi-Fi gets flaky later, reapply the default iwd and NetworkManager no-powersave settings with:
+
+```bash
+sudo /opt/virginator/scripts/fix-wifi-powersave.sh
+```
+
+The same script is safe to run from the live ISO after cloning the repo:
+
+```bash
+sudo ./scripts/fix-wifi-powersave.sh
+```
+
 ## Package Stages
 
 - `preinstall.sh`: live ISO bootstrap tools only - `reflector`, `git`, `skim`

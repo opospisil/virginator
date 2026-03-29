@@ -45,13 +45,13 @@ if [[ $(id -u) -eq 0 ]]; then
   systemctl is-enabled --quiet bluetooth.service && printf '[ok] bluetooth enabled\n' || printf '[missing] bluetooth enabled\n'
   systemctl is-enabled --quiet pcscd.socket && printf '[ok] pcscd.socket enabled\n' || printf '[missing] pcscd.socket enabled\n'
 
-  if [[ -f /etc/NetworkManager/conf.d/20-wifi-backend.conf ]] && grep -Fqx 'wifi.backend=iwd' /etc/NetworkManager/conf.d/20-wifi-backend.conf; then
+  if [[ -f /etc/NetworkManager/conf.d/20-wifi.conf ]] && grep -Fqx 'wifi.backend=iwd' /etc/NetworkManager/conf.d/20-wifi.conf; then
     printf '[ok] NetworkManager wifi backend set to iwd\n'
   else
     printf '[missing] NetworkManager wifi backend set to iwd\n'
   fi
 
-  if [[ -f /etc/NetworkManager/conf.d/20-wifi-powersave.conf ]] && grep -Fqx 'wifi.powersave=2' /etc/NetworkManager/conf.d/20-wifi-powersave.conf; then
+  if [[ -f /etc/NetworkManager/conf.d/20-wifi.conf ]] && grep -Fqx 'wifi.powersave=2' /etc/NetworkManager/conf.d/20-wifi.conf; then
     printf '[ok] Wi-Fi powersave disabled\n'
   else
     printf '[missing] Wi-Fi powersave disabled\n'
