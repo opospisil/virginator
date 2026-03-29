@@ -58,7 +58,6 @@ create_primary_user() {
   local user_args=()
   local groups_csv
 
-  [[ ! -e "/home/$PRIMARY_USER_NAME" ]] || die "target home directory /home/$PRIMARY_USER_NAME already exists"
   ! id "$PRIMARY_USER_NAME" >/dev/null 2>&1 || die "user $PRIMARY_USER_NAME already exists"
 
   if ! getent group "$PRIMARY_USER_NAME" >/dev/null 2>&1; then
@@ -79,6 +78,24 @@ create_primary_user() {
   fi
 
   useradd "${user_args[@]}" "$PRIMARY_USER_NAME"
+}
+
+rename_existing_home_if_needed() {
+  local home_path backup_path timestamp
+
+  home_path="/home/$PRIMARY_USER_NAME"
+
+  [[ -e "$home_path" ]] || return 0
+  [[ -d "$home_path" ]] || die "existing path $home_path is not a directory"
+  [[ ! -L "$home_path" ]] || die "existing path $home_path is a symlink; refusing to rename automatically"
+
+  timestamp=$(date +%Y%m%d-%H%M%S)
+  backup_path="${home_path}.old-${timestamp}"
+
+  [[ ! -e "$backup_path" ]] || die "backup home path already exists: $backup_path"
+
+  log "renaming existing home directory $home_path to $backup_path"
+  mv "$home_path" "$backup_path"
 }
 
 require_root
@@ -119,6 +136,7 @@ EOF
 chmod 440 /etc/sudoers.d/10-wheel
 
 log "creating the fresh primary user"
+rename_existing_home_if_needed
 create_primary_user
 
 log "configuring NetworkManager to use iwd"

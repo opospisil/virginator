@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the target drive
-DRIVE="/dev/vda"
+DRIVE="/dev/nvme0n1"
 
 echo "Creating GPT partition table on $DRIVE..."
 parted -s "$DRIVE" mklabel gpt
@@ -11,11 +11,11 @@ echo "Creating partitions..."
 parted -s "$DRIVE" mkpart "BOOT" fat32 1MiB 1025MiB
 parted -s "$DRIVE" set 1 esp on
 
-# 2. Root Partition (11GiB)
-parted -s "$DRIVE" mkpart "ROOT" ext4 1025MiB 12289MiB
+# 2. Root Partition (256GiB)
+parted -s "$DRIVE" mkpart "ROOT" ext4 1025MiB 262144MiB
 
 # 3. Home Partition (Remaining space)
-parted -s "$DRIVE" mkpart "HOME" ext4 12289MiB 100%
+parted -s "$DRIVE" mkpart "HOME" ext4 262144MiB 100%
 
 echo "Formatting filesystems..."
 # Adjusting device naming for NVMe (p1, p2) vs SATA (1, 2)

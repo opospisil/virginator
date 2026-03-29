@@ -18,7 +18,9 @@ for script in \
   "$SCRIPT_DIR/20-install-neovim-nightly.sh" \
   "$SCRIPT_DIR/30-install-go.sh" \
   "$SCRIPT_DIR/40-install-node.sh" \
-  "$SCRIPT_DIR/50-install-bitwarden.sh"
+  "$SCRIPT_DIR/50-install-bitwarden.sh" \
+  "$SCRIPT_DIR/60-install-aur-helper.sh" \
+  "$SCRIPT_DIR/70-install-aur-packages.sh"
 do
   log "executing ${script##*/}"
   bash "$script"

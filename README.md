@@ -69,13 +69,14 @@ VAULT_PARTITION=""
 
 ## Fresh user workflow
 
-The scripts intentionally create a brand-new user and refuse to reuse an existing home directory at `/home/<new-user>`.
+The scripts intentionally create a brand-new user. If `/home/<new-user>` already exists on the preserved home partition, it is renamed to `/home/<new-user>.old-YYYYmmdd-HHMMSS` before the fresh home is created.
 
 That lets you:
 
 - keep old home directories on the preserved home partition
 - log into a clean account with clean dotfiles
 - manually copy or symlink only the pieces you still want
+- keep a timestamped backup of any previous home for the same username
 - use the same shared install tree and readable machine config for both root and user phases
 
 ## Quick start
@@ -162,6 +163,15 @@ nmcli device wifi list
 iwctl
 ```
 
+## Package Stages
+
+- `preinstall.sh`: live ISO bootstrap tools only - `reflector`, `git`, `skim`
+- `packages/bootstrap.txt`: minimal pacstrap set for the fresh system
+- `packages/base.txt`, `packages/desktop-i3.txt`, `packages/audio.txt`, `packages/auth.txt`, `packages/containers.txt`: post-root pacman installs
+- `AUR_HELPER_PACKAGE` and `AUR_PACKAGES` in `config/defaults.sh`: post-user AUR installs
+
+That keeps the package sources grouped by install stage instead of scattering package names through scripts.
+
 ## Optional authentication setup
 
 Authentication changes stay opt-in and manual.
@@ -195,6 +205,8 @@ The default install is split into:
 Optional extras reviewed from the current package inventory live under `packages/optional/`.
 
 Neovim is not installed from pacman in the default flow. `post-user/run.sh` installs the nightly build into `~/.local/opt/neovim-nightly` and symlinks `~/.local/bin/nvim`.
+
+The post-user phase also bootstraps the configured AUR helper and installs the configured AUR packages from `AUR_PACKAGES`.
 
 The default desktop flow is `lemurs` -> `i3`.
 

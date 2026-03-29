@@ -18,3 +18,7 @@ VAULT_MOUNTPOINT="/vault"
 
 GO_VERSION="1.26.1"
 NODE_VERSION="24.14.1"
+
+# Optional AUR overrides.
+# AUR_HELPER_PACKAGE="paru-bin"
+# AUR_PACKAGES=(brave-bin)
