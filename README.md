@@ -18,6 +18,7 @@ Install scripts to automate Arch linux installation and make reclaiming ones vir
 - prefer Podman over Docker for dev containers
 - avoid touching old home directories or the encrypted vault during base install
 - use `NetworkManager` with `iwd` as the Wi-Fi backend and disable Wi-Fi powersave by default
+- enable touchpad tap-to-click and disable-while-typing by default
 
 ## Repository layout
 

@@ -15,6 +15,7 @@ load_config "$VIRGINATOR_CONFIG"
 for script in \
   "$SCRIPT_DIR/10-install-packages.sh" \
   "$SCRIPT_DIR/20-configure-lemurs.sh" \
+  "$SCRIPT_DIR/25-configure-touchpad.sh" \
   "$SCRIPT_DIR/30-enable-services.sh"
 do
   log "executing ${script##*/}"

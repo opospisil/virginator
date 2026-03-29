@@ -29,10 +29,10 @@ else
   git clone "$DOTFILES_REPO_URL" "$DOTFILES_DIR"
 fi
 
-remove_conflicting_path "$HOME/.config/fish/config.fish"
-remove_conflicting_path "$HOME/.config/i3/config"
-remove_conflicting_path "$HOME/.config/i3blocks/config"
-remove_conflicting_path "$HOME/.config/alacritty/alacritty.toml"
+remove_conflicting_path "$HOME/.config/fish"
+remove_conflicting_path "$HOME/.config/i3"
+remove_conflicting_path "$HOME/.config/i3blocks"
+remove_conflicting_path "$HOME/.config/alacritty"
 
 cd "$DOTFILES_DIR"
 stow -R "${STOW_PACKAGES[@]}"

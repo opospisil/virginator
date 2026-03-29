@@ -13,6 +13,7 @@ polkit-gnome
 rofi
 ttf-iosevkaterm-nerd
 udiskie
+xf86-input-libinput
 xclip
 xorg-server
 xorg-xinit
