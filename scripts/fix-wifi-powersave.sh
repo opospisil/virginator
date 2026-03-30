@@ -14,68 +14,15 @@ has_systemd_unit() {
 }
 
 write_iwd_config() {
-  local config_file tmp_file
+  local config_file
 
   config_file=/etc/iwd/main.conf
   install -d -m 755 /etc/iwd
 
-  if [[ ! -f "$config_file" ]]; then
-    cat > "$config_file" <<'EOF'
-[General]
-DisablePowerSave=true
+  cat > "$config_file" <<'EOF'
+[DriverQuirks]
+PowerSaveDisable=*
 EOF
-    return 0
-  fi
-
-  tmp_file=$(mktemp)
-  awk '
-    BEGIN {
-      in_general = 0
-      general_seen = 0
-      setting_written = 0
-    }
-    /^\[General\]$/ {
-      if (in_general && !setting_written) {
-        print "DisablePowerSave=true"
-        setting_written = 1
-      }
-      print
-      in_general = 1
-      general_seen = 1
-      next
-    }
-    /^\[/ {
-      if (in_general && !setting_written) {
-        print "DisablePowerSave=true"
-        setting_written = 1
-      }
-      in_general = 0
-    }
-    in_general && /^DisablePowerSave=/ {
-      if (!setting_written) {
-        print "DisablePowerSave=true"
-        setting_written = 1
-      }
-      next
-    }
-    {
-      print
-    }
-    END {
-      if (in_general && !setting_written) {
-        print "DisablePowerSave=true"
-      }
-      if (!general_seen) {
-        if (NR > 0) {
-          print ""
-        }
-        print "[General]"
-        print "DisablePowerSave=true"
-      }
-    }
-  ' "$config_file" > "$tmp_file"
-
-  mv "$tmp_file" "$config_file"
 }
 
 disable_interface_powersave() {
@@ -125,7 +72,7 @@ restart_service_if_present() {
 write_iwd_config
 
 log "applying iwd power-save settings"
-printf '  - /etc/iwd/main.conf: DisablePowerSave=true\n'
+printf '  - /etc/iwd/main.conf: [DriverQuirks] PowerSaveDisable=*\n'
 restart_service_if_present iwd.service
 
 sleep 2

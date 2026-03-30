@@ -32,7 +32,6 @@ Install scripts to automate Arch linux installation and make reclaiming ones vir
 - `packages/` contains reviewed package bundles
 - `scripts/` contains reusable helpers like the vault, Neovim nightly, Go, Node, and Bitwarden installers
 - `scripts/` also contains opt-in YubiKey and fingerprint enrollment/PAM helpers
-- `skel/user/` contains initial user config files for `fish`, `i3`, and `alacritty`
 
 `lemurs` is the default display manager. The repo still keeps a simple `.xinitrc` fallback, but the normal login path is through lemurs.
 
@@ -104,7 +103,7 @@ sudo bash preinstall.sh
 cd virginator
 ```
 
-This sets `DisablePowerSave=true` in `/etc/iwd/main.conf`, restarts `iwd`, refreshes mirrors, installs `reflector`, `git`, `skim`, and clones the repo.
+This refreshes mirrors, installs `reflector`, `git`, `skim`, and clones the repo.
 
 3. Generate the partition selector file:
 
@@ -240,5 +239,3 @@ The default desktop flow is `lemurs` -> `i3`.
 - no automatic partitioning
 - no automatic PAM edits during install; YubiKey and fingerprint setup stays opt-in
 - no automatic migration from old home directories or vault content
-
-That keeps v1 focused on a safe reinstall path first.
