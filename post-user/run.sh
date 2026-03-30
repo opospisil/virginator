@@ -32,7 +32,6 @@ load_config "$VIRGINATOR_CONFIG"
 start_sudo_keepalive
 
 for script in \
-  "$SCRIPT_DIR/10-copy-user-skel.sh" \
   "$SCRIPT_DIR/20-install-neovim-nightly.sh" \
   "$SCRIPT_DIR/30-install-go.sh" \
   "$SCRIPT_DIR/40-install-node.sh" \
